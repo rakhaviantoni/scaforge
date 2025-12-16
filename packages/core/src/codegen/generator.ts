@@ -1,0 +1,269 @@
+/**
+ * Code Generator
+ * Generates files from plugin templates using Handlebars
+ * 
+ * Requirements: 3.2, 42.1
+ */
+import fs from 'fs-extra';
+import path from 'path';
+import Handlebars from 'handlebars';
+import type { PluginDefinition, PluginFile, FileCondition } from '../plugin-system/types';
+import type { ScaforgeConfig } from '../config/types';
+import { registerHelpers } from './helpers';
+
+// Register custom Handlebars helpers
+registerHelpers(Handlebars);
+
+/**
+ * Context passed to templates during generation
+ */
+export interface GeneratorContext {
+  /** The plugin being installed */
+  plugin: PluginDefinition;
+  /** Current project configuration */
+  config: ScaforgeConfig;
+  /** Plugin-specific options */
+  options: Record<string, unknown>;
+  /** Current framework template */
+  template: string;
+  /** List of installed plugin names */
+  installedPlugins: string[];
+}
+
+/**
+ * Result of file generation
+ */
+export interface GenerateFilesResult {
+  /** Files that were successfully generated */
+  generatedFiles: string[];
+  /** Files that were skipped (already exist or condition not met) */
+  skippedFiles: string[];
+  /** Any errors that occurred */
+  errors: Array<{ path: string; error: string }>;
+}
+
+/**
+ * Options for file generation
+ */
+export interface GenerateFilesOptions {
+  /** Whether to perform a dry run (don't write files) */
+  dryRun?: boolean;
+  /** Whether to force overwrite existing files */
+  forceOverwrite?: boolean;
+}
+
+
+/**
+ * Generates files for a plugin installation
+ * 
+ * @param projectRoot - Path to the project root directory
+ * @param plugin - The plugin definition
+ * @param config - Current project configuration
+ * @param options - Plugin-specific options
+ * @param generateOptions - Generation options
+ * @returns Result of the generation
+ */
+export async function generateFiles(
+  projectRoot: string,
+  plugin: PluginDefinition,
+  config: ScaforgeConfig,
+  options: Record<string, unknown> = {},
+  generateOptions: GenerateFilesOptions = {}
+): Promise<GenerateFilesResult> {
+  const result: GenerateFilesResult = {
+    generatedFiles: [],
+    skippedFiles: [],
+    errors: [],
+  };
+
+  // Build the context for templates
+  const context: GeneratorContext = {
+    plugin,
+    config,
+    options,
+    template: config.template,
+    installedPlugins: Object.keys(config.plugins).filter(
+      p => config.plugins[p]?.enabled
+    ),
+  };
+
+  // Process each file in the plugin
+  for (const file of plugin.files) {
+    try {
+      const fileResult = await processFile(
+        projectRoot,
+        file,
+        context,
+        generateOptions
+      );
+
+      if (fileResult.generated) {
+        result.generatedFiles.push(file.path);
+      } else if (fileResult.skipped) {
+        result.skippedFiles.push(file.path);
+      }
+    } catch (error) {
+      result.errors.push({
+        path: file.path,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Result of processing a single file
+ */
+interface ProcessFileResult {
+  generated: boolean;
+  skipped: boolean;
+}
+
+/**
+ * Processes a single plugin file
+ */
+async function processFile(
+  projectRoot: string,
+  file: PluginFile,
+  context: GeneratorContext,
+  options: GenerateFilesOptions
+): Promise<ProcessFileResult> {
+  // Check if condition is met
+  if (file.condition && !evaluateCondition(file.condition, context)) {
+    return { generated: false, skipped: true };
+  }
+
+  const targetPath = path.join(projectRoot, file.path);
+
+  // Check if file exists and shouldn't be overwritten
+  if (await fs.pathExists(targetPath)) {
+    if (!file.overwrite && !options.forceOverwrite) {
+      return { generated: false, skipped: true };
+    }
+  }
+
+  // Compile and render template
+  const template = Handlebars.compile(file.template);
+  const content = template(context);
+
+  // Write file (unless dry run)
+  if (!options.dryRun) {
+    await fs.ensureDir(path.dirname(targetPath));
+    await fs.writeFile(targetPath, content, 'utf-8');
+  }
+
+  return { generated: true, skipped: false };
+}
+
+/**
+ * Evaluates a file condition against the current context
+ * 
+ * @param condition - The condition to evaluate
+ * @param context - The generator context
+ * @returns true if the condition is met
+ */
+export function evaluateCondition(
+  condition: FileCondition,
+  context: GeneratorContext
+): boolean {
+  // Check hasPlugin condition
+  if (condition.hasPlugin) {
+    if (!context.installedPlugins.includes(condition.hasPlugin)) {
+      return false;
+    }
+  }
+
+  // Check notHasPlugin condition
+  if (condition.notHasPlugin) {
+    if (context.installedPlugins.includes(condition.notHasPlugin)) {
+      return false;
+    }
+  }
+
+  // Check template condition
+  if (condition.template) {
+    if (context.template !== condition.template) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Removes files that were generated by a plugin
+ * 
+ * @param projectRoot - Path to the project root directory
+ * @param plugin - The plugin definition
+ * @param config - Current project configuration
+ * @returns Array of removed file paths
+ */
+export async function removeGeneratedFiles(
+  projectRoot: string,
+  plugin: PluginDefinition,
+  config: ScaforgeConfig
+): Promise<string[]> {
+  const removedFiles: string[] = [];
+
+  const context: GeneratorContext = {
+    plugin,
+    config,
+    options: config.plugins[plugin.name]?.options ?? {},
+    template: config.template,
+    installedPlugins: Object.keys(config.plugins).filter(
+      p => config.plugins[p]?.enabled
+    ),
+  };
+
+  for (const file of plugin.files) {
+    // Only remove files that would have been generated
+    if (file.condition && !evaluateCondition(file.condition, context)) {
+      continue;
+    }
+
+    const targetPath = path.join(projectRoot, file.path);
+
+    if (await fs.pathExists(targetPath)) {
+      await fs.remove(targetPath);
+      removedFiles.push(file.path);
+    }
+  }
+
+  return removedFiles;
+}
+
+/**
+ * Gets the list of files that would be generated for a plugin
+ * (without actually generating them)
+ * 
+ * @param plugin - The plugin definition
+ * @param config - Current project configuration
+ * @param options - Plugin-specific options
+ * @returns Array of file paths that would be generated
+ */
+export function getFilesToGenerate(
+  plugin: PluginDefinition,
+  config: ScaforgeConfig,
+  options: Record<string, unknown> = {}
+): string[] {
+  const context: GeneratorContext = {
+    plugin,
+    config,
+    options,
+    template: config.template,
+    installedPlugins: Object.keys(config.plugins).filter(
+      p => config.plugins[p]?.enabled
+    ),
+  };
+
+  return plugin.files
+    .filter(file => {
+      if (file.condition) {
+        return evaluateCondition(file.condition, context);
+      }
+      return true;
+    })
+    .map(file => file.path);
+}

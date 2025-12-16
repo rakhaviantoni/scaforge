@@ -1,0 +1,41 @@
+{
+  "name": "@scaforge/plugin-forms-rhf",
+  "version": "1.0.0",
+  "description": "React Hook Form with Zod validation plugin for Scaforge",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "scaforge",
+    "plugin",
+    "forms",
+    "react-hook-form",
+    "zod",
+    "validation"
+  ],
+  "author": "Scaforge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@scaforge/core": "workspace:*",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react-hook-form": "^7.48.0",
+    "@hookform/resolvers": "^3.3.0"
+  }
+}

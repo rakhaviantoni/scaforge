@@ -1,0 +1,64 @@
+{
+  "name": "@scaforge/core",
+  "version": "0.1.0",
+  "description": "Core utilities and plugin system for Scaforge - a modular full-stack boilerplate ecosystem",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "lint": "eslint src/",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "zod": "^3.23.0",
+    "fs-extra": "^11.2.0",
+    "handlebars": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.0",
+    "@types/handlebars": "^4.1.0",
+    "fast-check": "^3.19.0",
+    "tsup": "^8.0.0",
+    "vitest": "^1.6.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "scaforge",
+    "core",
+    "plugin-system",
+    "boilerplate",
+    "scaffold",
+    "fullstack",
+    "nextjs",
+    "nuxt",
+    "tanstack"
+  ],
+  "license": "MIT",
+  "author": "Rakha Viantoni",
+  "homepage": "https://scaforge.rakhaviantoni.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rakhaviantoni/scaforge.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/rakhaviantoni/scaforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "@scaforge/plugin-api-trpc",
+  "version": "1.0.0",
+  "description": "tRPC plugin for Scaforge - End-to-end typesafe APIs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scaforge",
+    "plugin",
+    "trpc",
+    "api",
+    "typescript"
+  ],
+  "author": "Scaforge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@scaforge/core": "workspace:*",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@trpc/server": "^11.0.0",
+    "@trpc/client": "^11.0.0",
+    "@trpc/react-query": "^11.0.0",
+    "superjson": "^2.2.0"
+  }
+}

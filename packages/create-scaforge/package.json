@@ -1,0 +1,62 @@
+{
+  "name": "create-scaforge",
+  "version": "0.1.0",
+  "description": "Create a new Scaforge project - modular full-stack boilerplate ecosystem",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "create-scaforge": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "lint": "eslint src/",
+    "test": "vitest --run --passWithNoTests",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@scaforge/cli": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "vitest": "^1.6.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "create",
+    "scaforge",
+    "boilerplate",
+    "scaffold",
+    "fullstack",
+    "nextjs",
+    "nuxt",
+    "tanstack",
+    "hydrogen",
+    "starter"
+  ],
+  "license": "MIT",
+  "author": "Rakha Viantoni",
+  "homepage": "https://scaforge.rakhaviantoni.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rakhaviantoni/scaforge.git",
+    "directory": "packages/create-scaforge"
+  },
+  "bugs": {
+    "url": "https://github.com/rakhaviantoni/scaforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

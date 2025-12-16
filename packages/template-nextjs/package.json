@@ -1,0 +1,48 @@
+{
+  "name": "@scaforge/template-nextjs",
+  "version": "0.1.0",
+  "description": "Next.js 15 App Router template for Scaforge",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0"
+  },
+  "files": [
+    "dist",
+    "template"
+  ],
+  "keywords": [
+    "scaforge",
+    "template",
+    "nextjs",
+    "react",
+    "typescript",
+    "boilerplate"
+  ],
+  "license": "MIT",
+  "author": "Rakha Viantoni",
+  "homepage": "https://scaforge.rakhaviantoni.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rakhaviantoni/scaforge.git",
+    "directory": "packages/template-nextjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

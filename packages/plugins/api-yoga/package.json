@@ -1,0 +1,41 @@
+{
+  "name": "@scaforge/plugin-api-yoga",
+  "version": "1.0.0",
+  "description": "GraphQL Yoga + Pothos plugin for Scaforge - Code-first GraphQL with excellent DX",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scaforge",
+    "plugin",
+    "graphql-yoga",
+    "pothos",
+    "graphql",
+    "api"
+  ],
+  "author": "Scaforge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@scaforge/core": "workspace:*",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "graphql-yoga": "^5.0.0",
+    "@pothos/core": "^4.0.0",
+    "@pothos/plugin-zod": "^4.0.0",
+    "@pothos/plugin-prisma": "^4.0.0",
+    "graphql": "^16.0.0"
+  }
+}

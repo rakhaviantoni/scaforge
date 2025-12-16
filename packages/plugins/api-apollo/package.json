@@ -1,0 +1,39 @@
+{
+  "name": "@scaforge/plugin-api-apollo",
+  "version": "1.0.0",
+  "description": "Apollo GraphQL plugin for Scaforge - GraphQL API with Apollo Server",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scaforge",
+    "plugin",
+    "apollo",
+    "graphql",
+    "api"
+  ],
+  "author": "Scaforge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@scaforge/core": "workspace:*",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@apollo/server": "^4.0.0",
+    "@apollo/client": "^3.8.0",
+    "graphql": "^16.0.0",
+    "graphql-tag": "^2.12.0"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@scaforge/plugin-cache-upstash",
+  "version": "1.0.0",
+  "description": "Upstash Redis Cache plugin for Scaforge",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scaforge",
+    "plugin",
+    "cache",
+    "upstash",
+    "redis"
+  ],
+  "author": "Scaforge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@scaforge/core": "workspace:*",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  },
+  "peerDependencies": {
+    "@upstash/redis": "^1.28.0",
+    "@upstash/ratelimit": "^1.0.0"
+  }
+}

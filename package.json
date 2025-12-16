@@ -1,0 +1,44 @@
+{
+  "name": "scaforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A modular, plug-and-play full-stack boilerplate ecosystem",
+  "workspaces": [
+    "packages/*",
+    "packages/plugins/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "landing:dev": "pnpm --filter @scaforge/landing dev",
+    "landing:build": "pnpm --filter @scaforge/landing build",
+    "publish:all": "pnpm build && pnpm -r publish --access public --no-git-checks"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0",
+    "@changesets/cli": "^2.27.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "author": "Rakha Viantoni",
+  "license": "MIT",
+  "homepage": "https://scaforge.rakhaviantoni.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rakhaviantoni/scaforge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rakhaviantoni/scaforge/issues"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@scaforge/plugin-db-prisma",
+  "version": "1.0.0",
+  "description": "Prisma ORM plugin for Scaforge",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scaforge",
+    "plugin",
+    "prisma",
+    "database",
+    "orm"
+  ],
+  "author": "Scaforge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@scaforge/core": "workspace:*",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "prisma": "^5.0.0",
+    "@prisma/client": "^5.0.0"
+  }
+}

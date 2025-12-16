@@ -1,0 +1,41 @@
+{
+  "name": "@scaforge/plugin-api-orpc",
+  "version": "1.0.0",
+  "description": "ORPC plugin for Scaforge - OpenAPI-compatible RPC with excellent TypeScript support",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "scaforge",
+    "plugin",
+    "orpc",
+    "rpc",
+    "openapi",
+    "api"
+  ],
+  "author": "Scaforge Team",
+  "license": "MIT",
+  "dependencies": {
+    "@scaforge/core": "workspace:*",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@orpc/server": "^1.0.0",
+    "@orpc/client": "^1.0.0",
+    "@orpc/react": "^1.0.0",
+    "@orpc/openapi": "^1.0.0",
+    "zod": "^3.22.0"
+  }
+}
